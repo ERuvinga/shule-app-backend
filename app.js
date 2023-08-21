@@ -2,10 +2,9 @@
 // include connect mongoose to cluster mangodb
 require("./db/mongo_db");
 
-
 const express = require('express');
 const app = express();  // methode express
-const userShema = require('./Models/test');
+const testRouter = require('./Routes/test');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -14,22 +13,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/test', (req, res) => { // fecting user of Test Api
-
-    let datas;
-    userShema.find()
-    .then(allUsers => {
-         datas = {...allUsers};
-         res.json(datas);
-         res.status(200);
-    })
-    .catch((error)=> {
-        console.log(error);
-        res.json({message:"Error server"});
-        res.status(200);
-    });
-});
-
-
+app.get('/test', testRouter); // router checking if remote server runing
 
 module.exports = app;
