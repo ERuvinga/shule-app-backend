@@ -1,5 +1,7 @@
-// mon point d'entree de mon app
+// include connect mongoose to cluster mangodb
+require("./db/mongo_db")
 
+//point d'entree de mon app
 const http = require('http');
 const app = require('./app');
 
