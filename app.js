@@ -13,16 +13,15 @@ app.use((req, res, next) => {
 
 app.use('/test', (req, res) => {
 
-    const stuff = [
+    const datas = [
         {
             _id: '1234',
-            title: "mon article",
-            description: "Camera",
-            imageUrl: "",
-            UserId: "elie"
+            title: "Node Api test root",
+            description: "Web dev",
+            Autor: "Elie_Ruvinga"
         }
     ]
-    res.json(stuff);
+    res.json(datas);
     res.status(200);
 });
 
