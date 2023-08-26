@@ -18,6 +18,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/test', testRoute); // router checking if remote server runing
-app.post('/Authentification', ()=>{console.log("ok")});
+app.use('/Authentification', AuthRoute);
 
 module.exports = app;

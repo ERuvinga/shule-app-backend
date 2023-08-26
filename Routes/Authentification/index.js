@@ -2,7 +2,7 @@
 const router = require("express").Router();
 const CtrlStudents = require("../../Controllers/Authentification")
 
-router.use("/Login", CtrlStudents.login);
-router.use("/Register", CtrlStudents.register);
+router.post("/Login", CtrlStudents.login);
+router.post("/Register", CtrlStudents.register);
 
 module.exports = router;
