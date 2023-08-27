@@ -2,27 +2,66 @@
 
 const mongoose = require("mongoose");
 const StudentSchema = mongoose.Schema({
+    allName :{
+        type:String,
+        default:""
+    },
+
     name:{
-        type:String,
-        default:""
+        type:Object,
+        default:{
+            first:"",
+            second:"",
+            last:""
+        }
     },
-    postName:{
-        type:String,
-        default:""
+    birthDatas:{
+        type:Object,
+        default:{
+            date:"",
+            location:""
+        }
     },
 
-    otherName:{
+    location:{
         type:String,
         default:""
+    },
+    registerDatas:{
+        type:Object,
+        default:{
+            DATE:Date.now(),
+            CLASS: 1,
+            YEAR_SC: "",
+        }
     },
 
-    matricule:{
-        type:String,
-        default:""
-    },
     passWord:{
         type:String,
         default:""
+    },
+
+    stateAccount:{
+        type:Boolean,
+        default: false
+    },
+
+    picture:{
+        type:String,
+        default:""
+    },
+
+    //tutaire Datas
+    dataOfTutaire:{
+        type:Object,
+        default:{
+            name:"",
+            postName:"",
+            latName: "",
+            email: "",
+            tel:"",
+            location:""
+        }
     },
 });
 

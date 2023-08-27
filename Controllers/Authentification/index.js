@@ -7,7 +7,28 @@ exports.login = (req, res) => {
     res.status(200).json({mes:"merci"})
 };
 
-exports.register = (req, res) => {
+exports.Activation_account = (req, res) => {
     console.log(req.body);
-    res.status(200).json({mes:"merci"})
+    res.status(200).json({mes:"merci"});
 }
+
+exports.registerNewStudent = (req, res) =>{
+    const formData = {
+              passWord: "****",
+    };
+
+    const student = new modelOfStudents(formData); // created news student with datas of formulaire
+    student.save() // saving new objet in data base
+    .then((datas)=> {
+        res.status(200);
+        res.json({message: "'success': New student created"});
+
+        // Send a email message to news student, content matricule _id
+        console.log(datas);
+    })
+    .catch(error =>{
+        console.log(error);
+        res.status(500);
+        res.json({message: "'Error': Error Server"});
+    });
+};
