@@ -133,24 +133,147 @@ exports.login = (req, res) => {
 };
 
 exports.Activation_account = (req, res) => {
+    const idUser = req.body.matricule.split("_")[1]; //cup IdUser in matricule
 
-    // hashing PassWord
-    bcrypt.hash(req.body.passWord, SALTE_PWD)
-    .then(passwordHash =>{
-        console.log(passwordHash);
-        const NewDirector = new modelDirectors({
-            passWord : passwordHash
-        });
-        // saving
-        // NewDirector.save()
-        // .then(console.log("Director created Compte"))
-        // .catch(error => console.log( `error lors de la creation de compte\n ${error}`));
-            
-    })
-    .catch(error => console.log(`Erreur lors du hashing du password \n ${error}`));
+    // SEARCHING uSER IN DATABASE
+    //1 Students.Collection
+    try{
+        modelOfStudents.findOne({_id:idUser})
+        .then(userFund =>{
+            if(userFund){
+                if(userFund.stateAccount){
+                    res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
+                }
+                else{
+                    // hashing PassWord
+                    bcrypt.hash(req.body.passWord, SALTE_PWD)
+                    .then(passwordHash =>{
+                        modelOfStudents.updateOne({_id:idUser},{
+                            $set:{
+                                passWord:passwordHash,
+                                stateAccount: true  
+                            }
+                        })
+                        .then(()=>{
+                            res.status(200).json({msg:"Activation du compte Reussi", Updting:true, actif:true});
+                        })
+    
+                        .catch((error)=>{
+                            console.log(error);
+                            res.status(500).json({msg:"Activation echouée, Error Server"});
+                        })  
+                    })
+                    .catch(error => {
+                        console.log(`Erreur lors du hashing du password \n ${error}`)
+                        res.status(500).json({msg:"Impossible d'activer le compte Error Server lors du hashing du password"});
+                    });
+               }
+            }
 
-    res.status(200).json({msg:"merci"});
-}
+        })
+        .catch(error =>{
+            console.log(error)
+            res.status(500).json({msg:"Error Server"});
+        })
+    }
+    catch{(error)=>{
+        console.log(error);
+        res.status(500).json({msg:"Error Server"});
+    }}
+
+        // 2 Teachers.Collection
+        try{
+            modelTeachers.findOne({_id:idUser})
+            .then(userFund =>{
+                if(userFund){
+                    if(userFund.stateAccount){
+                        res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
+                    }
+                    else{
+                        // hashing PassWord
+                        bcrypt.hash(req.body.passWord, SALTE_PWD)
+                        .then(passwordHash =>{
+                            modelTeachers.updateOne({_id:idUser},{
+                                $set:{
+                                    passWord:passwordHash,
+                                    stateAccount: true  
+                                }
+                            })
+                            .then(()=>{
+                                res.status(200).json({msg:"Activation du compte Reussi", Updting:true, actif:true});
+                            })
+        
+                            .catch((error)=>{
+                                console.log(error);
+                                res.status(500).json({msg:"Activation echouée, Error Server"});
+                            })  
+                        })
+                        .catch(error => {
+                            console.log(`Erreur lors du hashing du password \n ${error}`)
+                            res.status(500).json({msg:"Impossible d'activer le compte Error Server lors du hashing du password"});
+                        });
+                   }
+                }
+            })
+            .catch(error =>{
+                console.log(error)
+                res.status(500).json({msg:"Error Server"});
+            })
+        }
+        catch{(error)=>{
+            console.log(error);
+            res.status(500).json({msg:"Error Server"});
+        }}
+
+
+        // 3 Director.Collection
+        try{
+            modelDirectors.findOne({_id:idUser})
+            .then(userFund =>{
+                if(userFund){
+                    if(userFund.stateAccount){
+                        res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
+                    }
+                    else{
+                        // hashing PassWord
+                        bcrypt.hash(req.body.passWord, SALTE_PWD)
+                        .then(passwordHash =>{
+                            modelDirectors.updateOne({_id:idUser},{
+                                $set:{
+                                    passWord:passwordHash,
+                                    stateAccount: true  
+                                }
+                            })
+                            .then(()=>{
+                                res.status(200).json({msg:"Activation du compte Reussi", Updting:true, actif:true});
+                            })
+        
+                            .catch((error)=>{
+                                console.log(error);
+                                res.status(500).json({msg:"Activation echouée, Error Server"});
+                            })  
+                        })
+                        .catch(error => {
+                            console.log(`Erreur lors du hashing du password \n ${error}`)
+                            res.status(500).json({msg:"Impossible d'activer le compte Error Server lors du hashing du password"});
+                        });
+                   }
+                }
+                else{
+                    console.log("aucun Compte Correspondant");
+                    res.status(404).json({msg:"Desolé: Votre Matricule ne correspond à aucun compte!"});                   
+                }
+            })
+            .catch(error =>{
+                console.log(error)
+                res.status(500).json({msg:"Error Server"});
+            })
+        }
+        catch{(error)=>{
+            console.log(error);
+            res.status(500).json({msg:"Error Server"});
+        }}
+    }
 
 
 // Register New Teacher
