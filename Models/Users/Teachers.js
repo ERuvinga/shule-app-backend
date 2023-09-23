@@ -41,7 +41,11 @@ const teacherSchema = mongoose.Schema({
     stateAccount: {
         type:Boolean,
         default:false,
-    }
+    },
+    passWord:{
+        type:String,
+        default:""
+    },
 });
 
 module.exports = mongoose.model('teacher', teacherSchema);

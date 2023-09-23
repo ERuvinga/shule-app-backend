@@ -5,29 +5,166 @@ const modelOfStudents = require("../../Models/Users/Student"); // import model o
 const modelTeachers = require("../../Models/Users/Teachers"); // import model of Teachers
 const modelDirectors = require("../../Models/Users/Direction"); // import model of Teachers
 
-//const bcrypt = require("bcrypt");
+//Lib
+require("dotenv").config();
+const bcrypt = require("bcrypt"); // salting password Methode
+const jwt = require("jsonwebtoken");
+const SALTE_PWD = 10;
+
 exports.login = (req, res) => {
-    console.log(req.body);
-    res.status(200).json({mes:"merci"})
+    console.log(req.body)
+    const messageInactifAccount = "Ce Compte n'est pas encore Activé, Verifier Votre Matricule dans boite mail";
+    // cheking type of Account
+    switch(req.body.typeAccount){
+        case "Elv":{
+            modelOfStudents.findOne({$or:[{"dataOfTutaire.email":req.body.email},{"dataOfTutaire.tel":req.body.email}]})
+            .then(StudentFund =>{
+                if(StudentFund === null){
+                    res.status(401).json({msg:"Aucun Eleve Trouvé avec ces Identités"}) 
+                }
+
+                else{
+                    if(StudentFund.stateAccount){
+                        bcrypt.compare(req.body.passWord, StudentFund.passWord)
+                        .then(valid =>{
+                            if(!valid){
+                                res.status(401).json({msg:"email, Tel ou mot de pass du student Incorrect"})  
+                            }
+
+                            else{
+                            const Token = jwt.sign({
+                                    idUser:StudentFund._id,
+                                    mail:StudentFund.email
+                                },process.env.TOKEN_SIGN);
+                                res.status(200).json({msg:"Student trouvé", Token, StudentFund, typeAccount:"Student"});
+                            }
+                        })
+                        .catch(error => console.log(error))
+                    }
+
+                    else{
+                        res.status(401).json({msg:messageInactifAccount})
+                    }  
+                }
+            })
+            .catch(error =>{
+                 console.log(`Error Database ${error}`) // if Error  Connexion to dataBase
+                 res.status(500).json({msg:"Erreur server"}) 
+              });
+            break;
+        }
+
+        case "Ens":{
+            // Search in Teacher Collection User
+            modelTeachers.findOne({$or:[{"email":req.body.email},{"tel":req.body.email}]})
+            .then(TeacherFund=>{
+                if(TeacherFund === null){
+                    res.status(401).json({msg:"Aucun Enseignant Trouvé avec ces Identités"})  
+                }
+                else{
+                    if(TeacherFund.stateAccount){
+                        bcrypt.compare(req.body.passWord, TeacherFund.passWord)
+                        .then(valid =>{
+                            if(!valid){
+                                res.status(401).json({msg:"email, Tel ou mot de pass de l'ensignant Incorrect"})  
+                            }
+
+                            else{
+                            const Token = jwt.sign({
+                                    idUser: TeacherFund._id,
+                                    mail: TeacherFund.email
+                                },process.env.TOKEN_SIGN);
+                                res.status(200).json({msg:"Teacher trouvé", Token, TeacherFund, typeAccount:"Teacher"});
+                            }
+                        })
+                        .catch(error => console.log(error))
+                    }
+
+                    else{
+                        res.status(401).json({msg:messageInactifAccount})
+                    }  
+                }
+            })
+            .catch(error =>{
+                console.log(`Error Database ${error}`) // if Error  Connexion to dataBase
+                res.status(500).json({msg:"Erreur server"}) 
+             });
+            break;
+        }
+
+        case "Dir":{
+            // Searching in Director Collection User
+            modelDirectors.findOne({$or:[{"email":req.body.email},{"tel":req.body.email}]})
+            .then(DirectorFund =>{
+                        if(DirectorFund === null){
+                            res.status(401).json({msg:"Aucun Directeur Trouvé avec ces Identités"}) 
+                        }
+                        
+                        else{
+                                if(DirectorFund.stateAccount){
+                                    bcrypt.compare(req.body.passWord, DirectorFund.passWord)
+                                    .then(valid =>{
+                                        if(!valid){
+                                            res.status(401).json({msg:"email, Tel ou mot de pass du Directeur Incorrect"})  
+                                        }
+
+                                        else{
+                                        const Token = jwt.sign({
+                                                idUser:DirectorFund._id,
+                                                mail:DirectorFund.email
+                                            },process.env.TOKEN_SIGN);
+                                            res.status(200).json({msg:"Director trouvé", Token, DirectorFund, typeAccount:"Director"});
+                                        }
+                                    })
+                                    .catch(error => console.log(error))
+                                }
+
+                                else{
+                                    res.status(401).json({msg:messageInactifAccount})
+                                }                                
+                        }
+            })
+            .catch(error =>{
+                console.log(`Error Database ${error}`) // if Error  Connexion to dataBase
+                res.status(500).json({msg:"Erreur server"}) 
+             });
+        }
+    }
 };
 
 exports.Activation_account = (req, res) => {
-    console.log(req.body);
-    res.status(200).json({mes:"merci"});
+
+    // hashing PassWord
+    bcrypt.hash(req.body.passWord, SALTE_PWD)
+    .then(passwordHash =>{
+        console.log(passwordHash);
+        const NewDirector = new modelDirectors({
+            passWord : passwordHash
+        });
+        // saving
+        // NewDirector.save()
+        // .then(console.log("Director created Compte"))
+        // .catch(error => console.log( `error lors de la creation de compte\n ${error}`));
+            
+    })
+    .catch(error => console.log(`Erreur lors du hashing du password \n ${error}`));
+
+    res.status(200).json({msg:"merci"});
 }
 
 
 // Register New Teacher
 exports.registerNewDirector = (req, res) =>{
     const formData = {
-              passWord: "****",
+              email: req.body.matricule,
+              passWord :req.body.passWord
     };
 
-    const teacher = new modelDirectors(formData); // created new director user with datas of formulaire
-    teacher.save() // saving new objet in data base
+    const Director = new modelDirectors(formData); // created new director user with datas of formulaire
+    Director.save() // saving new objet in data base
     .then((datas)=> {
         res.status(200);
-        res.json({message: "'success': New teacher created"});
+        res.json({message: "'success': New Director created"});
 
         // Send a email message to news Director, content matricule _id
         console.log(datas);
