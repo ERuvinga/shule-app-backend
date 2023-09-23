@@ -7,7 +7,7 @@ const teacherSchema = mongoose.Schema({
         type:String,
         default:""
     },
-    
+
     name:{
         type:Object,
         default:{
@@ -18,12 +18,14 @@ const teacherSchema = mongoose.Schema({
     },
     email:{
         type:String,
-        default:""
+        default:"",
+        unique:true,
     },
     
     tel:{
         type:String,
-        default:""
+        default:"",
+        unique:true,
     },
 
     picture:{

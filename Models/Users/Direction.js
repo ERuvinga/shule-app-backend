@@ -1,7 +1,6 @@
 // Directors model datas
 
 const mongoose = require('mongoose');
-
 const DirectorSchema = mongoose.Schema({
     allName:{
         type:String,
@@ -18,12 +17,14 @@ const DirectorSchema = mongoose.Schema({
     },
     email:{
         type:String,
-        default:""
+        default:"",
+        unique:true
     },
     
     tel:{
         type:String,
-        default:""
+        default:"",
+        unique:true,
     },
 
     picture:{
@@ -37,6 +38,11 @@ const DirectorSchema = mongoose.Schema({
             funct:"DIRECTOR",
             level: 1,
         },
+    },
+
+    passWord:{
+        type:String,
+        default:""
     },
 
     stateAccount: {
