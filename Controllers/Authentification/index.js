@@ -12,7 +12,6 @@ const jwt = require("jsonwebtoken");
 const SALTE_PWD = 10;
 
 exports.login = (req, res) => {
-    console.log(req.body)
     const messageInactifAccount = "Ce Compte n'est pas encore Activé, Verifier Votre Matricule dans boite mail";
     // cheking type of Account
     switch(req.body.typeAccount){
@@ -134,6 +133,7 @@ exports.login = (req, res) => {
 
 exports.Activation_account = (req, res) => {
     const idUser = req.body.matricule.split("_")[1]; //cup IdUser in matricule
+    let userDetected = 0;
 
     // SEARCHING uSER IN DATABASE
     //1 Students.Collection
@@ -141,8 +141,9 @@ exports.Activation_account = (req, res) => {
         modelOfStudents.findOne({_id:idUser})
         .then(userFund =>{
             if(userFund){
+                userDetected += 1; // if user detected, Incremente value
                 if(userFund.stateAccount){
-                    res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
+                    res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updating:false, actif:true});
                 }
                 else{
                     // hashing PassWord
@@ -155,7 +156,7 @@ exports.Activation_account = (req, res) => {
                             }
                         })
                         .then(()=>{
-                            res.status(200).json({msg:"Activation du compte Reussi", Updting:true, actif:true});
+                            res.status(200).json({msg:"Activation du compte Reussi", Updating:true, actif:true});
                         })
     
                         .catch((error)=>{
@@ -169,7 +170,6 @@ exports.Activation_account = (req, res) => {
                     });
                }
             }
-
         })
         .catch(error =>{
             console.log(error)
@@ -186,6 +186,7 @@ exports.Activation_account = (req, res) => {
             modelTeachers.findOne({_id:idUser})
             .then(userFund =>{
                 if(userFund){
+                userDetected += 1; // if user detected, Incremente value
                     if(userFund.stateAccount){
                         res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
                     }
@@ -260,8 +261,10 @@ exports.Activation_account = (req, res) => {
                    }
                 }
                 else{
-                    console.log("aucun Compte Correspondant");
-                    res.status(404).json({msg:"Desolé: Votre Matricule ne correspond à aucun compte!"});                   
+                    if(!userDetected){
+                        console.log("aucun Compte Correspondant");
+                        res.status(404).json({msg:"Desolé: Votre Matricule ne correspond à aucun compte!"});                        
+                    }
                 }
             })
             .catch(error =>{
