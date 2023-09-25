@@ -33,9 +33,10 @@ exports.login = (req, res) => {
                             else{
                             const Token = jwt.sign({
                                     idUser:StudentFund._id,
-                                    mail:StudentFund.email
+                                    mail:StudentFund.email,
+                                    modelUser:"modelOfStudents"
                                 },process.env.TOKEN_SIGN);
-                                res.status(200).json({msg:"Student trouvé", Token, StudentFund, typeAccount:"Student"});
+                                res.status(200).json({msg:"Student trouvé", Token, DataUser:StudentFund, typeAccount:"Student"});
                             }
                         })
                         .catch(error => console.log(error))
@@ -71,9 +72,10 @@ exports.login = (req, res) => {
                             else{
                             const Token = jwt.sign({
                                     idUser: TeacherFund._id,
-                                    mail: TeacherFund.email
+                                    mail: TeacherFund.email,
+                                    modelUser:"modelTeachers"
                                 },process.env.TOKEN_SIGN);
-                                res.status(200).json({msg:"Teacher trouvé", Token, TeacherFund, typeAccount:"Teacher"});
+                                res.status(200).json({msg:"Teacher trouvé", Token, DataUser:TeacherFund, typeAccount:"Teacher"});
                             }
                         })
                         .catch(error => console.log(error))
@@ -110,9 +112,10 @@ exports.login = (req, res) => {
                                         else{
                                         const Token = jwt.sign({
                                                 idUser:DirectorFund._id,
-                                                mail:DirectorFund.email
+                                                mail:DirectorFund.email,
+                                                modelUser:"modelDirectors"
                                             },process.env.TOKEN_SIGN);
-                                            res.status(200).json({msg:"Director trouvé", Token, DirectorFund, typeAccount:"Director"});
+                                            res.status(200).json({msg:"Director trouvé", Token, DataUser:DirectorFund, typeAccount:"Director"});
                                         }
                                     })
                                     .catch(error => console.log(error))
@@ -143,7 +146,7 @@ exports.Activation_account = (req, res) => {
             if(userFund){
                 userDetected += 1; // if user detected, Incremente value
                 if(userFund.stateAccount){
-                    res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updating:false, actif:true});
+                    res.status(403).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updating:false, actif:true});
                 }
                 else{
                     // hashing PassWord
@@ -186,13 +189,14 @@ exports.Activation_account = (req, res) => {
             modelTeachers.findOne({_id:idUser})
             .then(userFund =>{
                 if(userFund){
-                userDetected += 1; // if user detected, Incremente value
+                    userDetected += 1; // if user detected, Incremente value
                     if(userFund.stateAccount){
-                        res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
+                        res.status(403).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updating:false, actif:true});
                     }
                     else{
                         // hashing PassWord
                         bcrypt.hash(req.body.passWord, SALTE_PWD)
+
                         .then(passwordHash =>{
                             modelTeachers.updateOne({_id:idUser},{
                                 $set:{
@@ -201,7 +205,7 @@ exports.Activation_account = (req, res) => {
                                 }
                             })
                             .then(()=>{
-                                res.status(200).json({msg:"Activation du compte Reussi", Updting:true, actif:true});
+                                res.status(200).json({msg:"Activation du compte Reussi", Updating:true, actif:true});
                             })
         
                             .catch((error)=>{
@@ -233,7 +237,7 @@ exports.Activation_account = (req, res) => {
             .then(userFund =>{
                 if(userFund){
                     if(userFund.stateAccount){
-                        res.status(200).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updting:false, actif:true});
+                        res.status(403).json({msg:"Votre Compte est deja Activé, Connectez-vous!", Updating:false, actif:true});
                     }
                     else{
                         // hashing PassWord
@@ -246,7 +250,7 @@ exports.Activation_account = (req, res) => {
                                 }
                             })
                             .then(()=>{
-                                res.status(200).json({msg:"Activation du compte Reussi", Updting:true, actif:true});
+                                res.status(200).json({msg:"Activation du compte Reussi", Updating:true, actif:true});
                             })
         
                             .catch((error)=>{
@@ -261,6 +265,7 @@ exports.Activation_account = (req, res) => {
                    }
                 }
                 else{
+                    //console.log(userDetected)
                     if(!userDetected){
                         console.log("aucun Compte Correspondant");
                         res.status(404).json({msg:"Desolé: Votre Matricule ne correspond à aucun compte!"});                        

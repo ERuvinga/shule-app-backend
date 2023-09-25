@@ -1,4 +1,4 @@
-// Routers for Authentification of ussers
+// Routers for Authentification of users
 const router = require("express").Router();
 const CtrlStudents = require("../../Controllers/Authentification")
 
