@@ -48,6 +48,11 @@ const DirectorSchema = mongoose.Schema({
     stateAccount: {
         type:Boolean,
         default:false,
+    },
+
+    typeAccount:{
+        type:String,
+        default:"Director"
     }
 });
 

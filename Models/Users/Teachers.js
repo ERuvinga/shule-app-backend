@@ -34,14 +34,25 @@ const teacherSchema = mongoose.Schema({
     },
     
     CLASS:{
+        type:String,
+        default:"A",
+    },
+
+    PROMOTION:{
         type:Number,
-        default:0,
+        default:1,
     },
 
     stateAccount: {
         type:Boolean,
         default:false,
     },
+    
+    typeAccount:{
+        type:String,
+        default:"Teacher"
+    },
+
     passWord:{
         type:String,
         default:""

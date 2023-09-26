@@ -31,8 +31,8 @@ const StudentSchema = mongoose.Schema({
         type:Object,
         default:{
             DATE:Date.now(),
-            CLASS: 1,
-            YEAR_SC: "",
+            CLASS: "A",
+            PROMOTION: 1,
         }
     },
 
@@ -44,6 +44,11 @@ const StudentSchema = mongoose.Schema({
     stateAccount:{
         type:Boolean,
         default: false
+    },
+
+    typeAccount:{
+        type:String,
+        default:"Student"
     },
 
     picture:{
