@@ -310,7 +310,7 @@ exports.registerNewDirector = (req, res) =>{
 // Register New Teacher
 exports.registerNewTeacher = (req, res) =>{
     const formData = {
-              passWord: "****",
+              passWord: "",
     };
 
     const teacher = new modelTeachers(formData); // created news Teacher with datas of formulaire
@@ -333,7 +333,7 @@ exports.registerNewTeacher = (req, res) =>{
 
 exports.registerNewStudent = (req, res) =>{
     const formData = {
-              passWord: "****",
+              passWord: " ",
     };
 
     const student = new modelOfStudents(formData); // created news student with datas of formulaire
