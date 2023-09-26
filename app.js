@@ -9,6 +9,7 @@ const app = express();  // methode express
 const testRoute = require('./Routes/test');
 const AuthRoute = require("./Routes/Authentification");
 const CheckAuthUser = require("./Routes/Authentification/Auth");
+const SearchUserRoute = require("./Routes/Users");
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -21,5 +22,8 @@ app.use((req, res, next) => {
 app.use('/test', testRoute); // router checking if remote server runing
 app.use('/AuthUser', CheckAuthUser);
 app.use('/Authentification', AuthRoute);
+
+// userRoutes
+app.use("/SeachUsers",SearchUserRoute);
 
 module.exports = app;
