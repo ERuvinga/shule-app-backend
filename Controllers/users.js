@@ -28,7 +28,7 @@ exports.getAllUsers =(req, res)=>{
         //search user in dataBase
         modelUser.find()
         .then(userFund =>{
-            AllUsers.push(userFund);
+            AllUsers.push(...userFund);
             if(i == 2){
                 res.status(200).json({msg:"Utalisateurs All", AllUsers});
             }
