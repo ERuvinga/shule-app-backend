@@ -24,6 +24,6 @@ app.use('/AuthUser', CheckAuthUser);
 app.use('/Authentification', AuthRoute);
 
 // userRoutes
-app.use("/SeachUsers",SearchUserRoute);
+app.use("/SearchUsers",SearchUserRoute);
 
 module.exports = app;

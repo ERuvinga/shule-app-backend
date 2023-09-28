@@ -39,3 +39,17 @@ exports.getAllUsers =(req, res)=>{
         })        
     }
 };
+
+exports.getAllStudents =(req, res)=>{
+
+        //search AllStudents in dataBase
+        modelOfStudents.find()
+        .then(userFund =>{
+                res.status(200).json({msg:"Utalisateurs All", AllUsers:userFund});
+            
+        })
+        .catch(error =>{
+            console.log(error);
+            res.status(500).json({error});
+        })        
+};
