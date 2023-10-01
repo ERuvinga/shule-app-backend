@@ -1,6 +1,4 @@
 
-const jwt = require("jsonwebtoken");
-
 // modelsusers 
 const modelOfStudents = require("../Models/Users/Student"); // import model of students user
 const modelTeachers = require("../Models/Users/Teachers"); // import model of Teachers
