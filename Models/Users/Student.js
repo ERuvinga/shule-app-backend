@@ -55,7 +55,15 @@ const StudentSchema = mongoose.Schema({
         type:String,
         default:""
     },
+    valuePayed:{
+        type:Number,
+        default: 0
+    },
 
+    LastDatePayed:{
+        type:Number,
+        default: Date.now()
+    },
     //tutaire Datas
     dataOfTutaire:{
         type:Object,
