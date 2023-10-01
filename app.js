@@ -10,6 +10,7 @@ const testRoute = require('./Routes/test');
 const AuthRoute = require("./Routes/Authentification");
 const CheckAuthUser = require("./Routes/Authentification/Auth");
 const SearchUserRoute = require("./Routes/Users");
+const StudentPay = require("./Routes/Pay");
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -25,5 +26,6 @@ app.use('/Authentification', AuthRoute);
 
 // userRoutes
 app.use("/SearchUsers",SearchUserRoute);
+app.use("/Paye",StudentPay);
 
 module.exports = app;

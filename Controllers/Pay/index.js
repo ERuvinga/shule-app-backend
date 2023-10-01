@@ -4,7 +4,6 @@ const ModelStudent = require("../../Models/Users/Student");
 // Controller Newpay
 exports.NewPaye = (req, res)=>{
 
-    const datePayed = Date.now()
     const userPayed = new UserPayed({
         nameUser: req.body.name,
         idUser: req.body.idUser,
