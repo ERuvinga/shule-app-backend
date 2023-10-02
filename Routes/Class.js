@@ -6,5 +6,6 @@ const CtrlrCheckAutorizationUser = require("../Controllers/Authentification/Auto
 router.get("/", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.getUserOfClass, CtrlClass.getCoursesOfClass);
 router.get("/Cotes", CtrlrCheckAutorizationUser.CheckAutorizationUser,CtrlClass.getCotesOfStudent);
 router.post("/newsCotes", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.SavingCote);
+router.get("/Student", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.StudentSearcCote);
 
 module.exports = router;

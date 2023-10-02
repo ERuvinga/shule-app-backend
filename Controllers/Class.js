@@ -24,14 +24,28 @@ exports.getUserOfClass = (req, res, next)=>{
 }
 
 exports.getCoursesOfClass = (req, res)=>{
+
     let levelProm ="";
     if(req.DataToTransfert.prom == 1 || req.DataToTransfert.prom == 2){
-        levelProm = "elementaire";
-    }
-
+         levelProm = "elementaire";
+        }
+        
     modelOfCours.find({level:levelProm})
     .then(Courses =>{
         res.status(200).json({Cours:Courses, users:req.DataToTransfert.users});
+    })
+    .catch(error=>{
+        console.log(error);
+        res.status(500).json({msg:"Error server"})
+    })
+}
+
+exports.StudentSearcCote =(req, res)=>{
+    levelProm= "elementaire"
+    
+    modelOfCours.find({level:levelProm})
+    .then(Courses =>{
+        res.status(200).json({Cours:Courses})
     })
     .catch(error=>{
         console.log(error);
