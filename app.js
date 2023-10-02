@@ -4,15 +4,32 @@ require("./db/mongo_db");
 
 const express = require('express');
 const app = express();  // methode express
-const testRouter = require('./Routes/test');
 
+//Routes 
+const testRoute = require('./Routes/test');
+const AuthRoute = require("./Routes/Authentification");
+const CheckAuthUser = require("./Routes/Authentification/Auth");
+const SearchUserRoute = require("./Routes/Users");
+const StudentPay = require("./Routes/Pay");
+const NewsRoute = require("./Routes/News");
+const ClassRoute = require("./Routes/Class")
+
+app.use(express.json());
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET', 'POST', 'PUT', 'DELETE');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    res.setHeader('Access-Control-Allow-Methods', '*');
     next();
 });
 
-app.get('/test', testRouter); // router checking if remote server runing
+app.use('/test', testRoute); // router checking if remote server runing
+app.use('/AuthUser', CheckAuthUser);
+app.use('/Authentification', AuthRoute);
+
+// userRoutes
+app.use("/SearchUsers",SearchUserRoute);
+app.use("/Paye",StudentPay);
+app.use("/News", NewsRoute);
+app.use("/Class", ClassRoute);
 
 module.exports = app;

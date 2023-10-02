@@ -2,16 +2,21 @@
 // connexion node Api to cluster Mongo
 require('dotenv').config(); // config and import .env file 
 const mongoose = require("mongoose");
-const uri = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_USER_PWD}@neema.mke4ipc.mongodb.net/shule-App`
+const Local_uri = process.env.LOCAL_URI+"/shule_App";
+const Remote_uri = `mongodb+srv://${process.env.DB_USER_NAME}:${process.env.DB_USER_PWD}@neema.mke4ipc.mongodb.net/shule-App`
 const connexion_options = {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }
 
-mongoose.connect(uri, connexion_options)
+mongoose.connect(Local_uri, connexion_options)
     .then(()=>{
-    console.log("Api Connect to remote DataBase");
+     console.log("Api Connect to Local DataBase");
     })
-    .catch((error)=>{
-        console.log("Error: "+ error.code+ ' '+ error.hostname)
+    .catch(()=>{
+        mongoose.connect(Remote_uri, connexion_options)
+        .then(()=>{
+            console.log("Api Connect to Remote DataBase");
+        })
+        .catch(error => console.log("Error: "+ error.code+ ' '+ error.hostname));
     });
