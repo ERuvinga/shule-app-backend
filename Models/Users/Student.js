@@ -55,6 +55,7 @@ const StudentSchema = mongoose.Schema({
         type:String,
         default:""
     },
+    
     valuePayed:{
         type:Number,
         default: 0

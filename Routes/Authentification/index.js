@@ -4,6 +4,7 @@ const CtrlStudents = require("../../Controllers/Authentification")
 
 router.post("/Login", CtrlStudents.login);
 router.post("/ActiveAccount", CtrlStudents.Activation_account);
-//router.post("/ActiveAccount", CtrlStudents.registerNewDirector);
+router.post("/newTeacher", CtrlStudents.registerNewTeacher);
+router.post("/newStudent", CtrlStudents.registerNewStudent);
 
 module.exports = router;

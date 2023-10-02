@@ -309,18 +309,27 @@ exports.registerNewDirector = (req, res) =>{
 
 // Register New Teacher
 exports.registerNewTeacher = (req, res) =>{
+    const DatasOfForm = req.body;
     const formData = {
-              passWord: "",
+        allName: `${DatasOfForm.firstName} ${DatasOfForm.SecondName} ${DatasOfForm.LastName}`,
+        name:{
+            first:DatasOfForm.firstName,
+            second:DatasOfForm.SecondName,
+            last:DatasOfForm.LastName
+        },
+        email:DatasOfForm.email,
+        tel:DatasOfForm.tel,
+        CLASS:DatasOfForm.classTeacher,
+        PROMOTION:parseInt(DatasOfForm.promition)
     };
-
-    const teacher = new modelTeachers(formData); // created news Teacher with datas of formulaire
-    teacher.save() // saving new objet in data base
+      
+    const newTeacher = new modelTeachers(formData); // created news Teacher with datas of formulaire
+    newTeacher.save() // saving new objet in data base
     .then((datas)=> {
         res.status(200);
         res.json({message: "'success': New teacher created"});
 
         // Send a email message to news Teache, content matricule _id
-        console.log(datas);
     })
     .catch(error =>{
         console.log(error);
@@ -332,12 +341,36 @@ exports.registerNewTeacher = (req, res) =>{
 //Register New Student
 
 exports.registerNewStudent = (req, res) =>{
+
+    const DatasOfForm = req.body;
     const formData = {
-              passWord: " ",
+        allName: `${DatasOfForm.firstName} ${DatasOfForm.SecondName} ${DatasOfForm.LastName}`,
+        name:{
+            first:DatasOfForm.firstName,
+            second:DatasOfForm.SecondName,
+            last:DatasOfForm.LastName
+        },
+        birthDatas:{
+            date:DatasOfForm.BornDay,
+            location:DatasOfForm.BordLocation
+        },
+        dataOfTutaire:{
+            name:DatasOfForm.RespFirstName,
+            postName:DatasOfForm.RespSecondName,
+            email:DatasOfForm.RespEmail,           
+            tel:DatasOfForm.RespTel,
+            latName: "",
+            location:"",
+        },
+        registerDatas:{
+            DATE:Date.now(),
+            CLASS:DatasOfForm.classStudent,
+            PROMOTION:parseInt(DatasOfForm.promition)
+        }
     };
 
-    const student = new modelOfStudents(formData); // created news student with datas of formulaire
-    student.save() // saving new objet in data base
+    const newStudent = new modelOfStudents(formData); // created news student with datas of formulaire
+    newStudent.save() // saving new objet in data base
     .then((datas)=> {
         res.status(200);
         res.json({message: "'success': New student created"});
