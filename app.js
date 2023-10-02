@@ -11,7 +11,8 @@ const AuthRoute = require("./Routes/Authentification");
 const CheckAuthUser = require("./Routes/Authentification/Auth");
 const SearchUserRoute = require("./Routes/Users");
 const StudentPay = require("./Routes/Pay");
-const NewsRoute = require("./Routes/News")
+const NewsRoute = require("./Routes/News");
+const ClassRoute = require("./Routes/Class")
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -29,5 +30,6 @@ app.use('/Authentification', AuthRoute);
 app.use("/SearchUsers",SearchUserRoute);
 app.use("/Paye",StudentPay);
 app.use("/News", NewsRoute);
+app.use("/Class", ClassRoute);
 
 module.exports = app;
