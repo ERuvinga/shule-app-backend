@@ -40,19 +40,6 @@ exports.getCoursesOfClass = (req, res)=>{
     })
 }
 
-exports.StudentSearcCote =(req, res)=>{
-    levelProm= "elementaire"
-    
-    modelOfCours.find({level:levelProm})
-    .then(Courses =>{
-        res.status(200).json({Cours:Courses})
-    })
-    .catch(error=>{
-        console.log(error);
-        res.status(500).json({msg:"Error server"})
-    })
-}
-
 exports.SavingCote = (req, res)=>{
 
     const Data = req.body;
@@ -99,11 +86,70 @@ exports.SavingCote = (req, res)=>{
 }
 
 
+exports.StudentSearchCourses =(req, res)=>{
+    levelProm= "elementaire";
+    const PonderationTot = 0;
+    
+    modelOfCours.find({level:levelProm})
+    .then(Courses =>{
+        console.log(Courses);
+        res.status(200).json({Cours:Courses,PonderationTot})
+    })
+    .catch(error=>{
+        console.log(error);
+        res.status(500).json({msg:"Error server"})
+    })
+}
+
 exports.getCotesOfStudent = (req, res)=>{
+    let Results={ // Resultat of Users
+        period_1:{
+            max:0,
+        },
+
+        period_2:{
+            max:0,
+        },    
+        examen_1:{
+            max:0
+        }   
+    };
+
     modelCotesStudents.find({idStudent: req.Autorization.userId})
     .then(datas =>{
-        console.log("Donnees trouvées ")
-        res.status(200).json({Cotes:datas});
+        console.log("Donnees trouvées");
+        datas.map((value)=>{
+            switch(value.periode){
+                case '1P':
+                    Results={
+                        ...Results,
+                        period_1:{
+                            max:Results.period_1.max + parseInt(value.cote),
+                        }
+                };
+                break;
+
+                case '2P':
+                    Results={
+                        ...Results,
+                        period_2:{
+                            max:Results.period_2.max + parseInt(value.cote),
+                        }
+                };
+                break;
+
+                case 'Examen1':
+                    Results={
+                        ...Results,
+                        examen_1:{
+                            max:Results.examen_1.max + parseInt(value.cote),
+                        }
+                };
+                break;
+            }
+            console.log(Results);
+        })
+        res.status(200).json({Cotes:datas,Resultat:Results});
     })
     .catch(error =>{
         console.log(error);
