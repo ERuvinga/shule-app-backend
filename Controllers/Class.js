@@ -23,23 +23,6 @@ exports.getUserOfClass = (req, res, next)=>{
     })
 }
 
-exports.getCoursesOfClass = (req, res)=>{
-
-    let levelProm ="";
-    if(req.DataToTransfert.prom == 1 || req.DataToTransfert.prom == 2){
-         levelProm = "elementaire";
-        }
-        
-    modelOfCours.find({level:levelProm})
-    .then(Courses =>{
-        res.status(200).json({Cours:Courses, users:req.DataToTransfert.users});
-    })
-    .catch(error=>{
-        console.log(error);
-        res.status(500).json({msg:"Error server"})
-    })
-}
-
 exports.SavingCote = (req, res)=>{
 
     const Data = req.body;
@@ -85,14 +68,33 @@ exports.SavingCote = (req, res)=>{
 
 }
 
+exports.getCoursesOfClass = (req, res)=>{
+
+    let levelProm ="";
+    if(req.DataToTransfert.prom == 1 || req.DataToTransfert.prom == 2){
+         levelProm = "elementaire";
+        }
+        
+    modelOfCours.find({level:levelProm})
+    .then(Courses =>{
+        res.status(200).json({Cours:Courses, users:req.DataToTransfert.users});
+    })
+    .catch(error=>{
+        console.log(error);
+        res.status(500).json({msg:"Error server"})
+    })
+}
+
 
 exports.StudentSearchCourses =(req, res)=>{
     levelProm= "elementaire";
-    const PonderationTot = 0;
+    let PonderationTot = 0;
     
     modelOfCours.find({level:levelProm})
     .then(Courses =>{
-        console.log(Courses);
+        Courses.map((value)=>{
+            PonderationTot += parseInt(value.pond); 
+        });
         res.status(200).json({Cours:Courses,PonderationTot})
     })
     .catch(error=>{
@@ -147,8 +149,8 @@ exports.getCotesOfStudent = (req, res)=>{
                 };
                 break;
             }
-            console.log(Results);
-        })
+        });
+        console.log(Results);
         res.status(200).json({Cotes:datas,Resultat:Results});
     })
     .catch(error =>{
