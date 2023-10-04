@@ -3,19 +3,18 @@ const modelOfStudents = require("../Models/Users/Student"); // import model of s
 const modelOfSTeacher = require("../Models/Users/Teachers"); // import model of students user
 const modelOfCours = require("../Models/Courses"); // import model of students user
 const modelCotesStudents = require("../Models/CotesStudents");
+const modelClassMent = require("../Models/Users/Classement"); //import Model of ClassementStudents
 
 exports.getUserOfClass = (req, res, next)=>{
 
-    modelOfSTeacher.findOne({_id:req.Autorization.userId})
-    .then(dataOfTeacher =>{        
-        modelOfStudents.find({$and:[{"registerDatas.CLASS":dataOfTeacher.CLASS},{"registerDatas.PROMOTION":dataOfTeacher.PROMOTION}]})
-        .then(datas=>{
-            req.DataToTransfert={
+    modelOfStudents.find({$and:[{"registerDatas.CLASS":req.Autorization.ClassUser},{"registerDatas.PROMOTION":req.Autorization.promoUser}]})
+    .then(datas=>{
+        req.DataToTransfert={
                 users: datas,
-                prom:dataOfTeacher.PROMOTION
-            };
-            next();
-        })
+                prom:req.Autorization.promoUser,
+                classUser:req.Autorization.ClassUser
+        };
+        next();
     })
     .catch(error=>{
         console.log(error);
@@ -69,11 +68,17 @@ exports.SavingCote = (req, res)=>{
 }
 
 exports.getCoursesOfClass = (req, res)=>{
-
+    console.log(req.DataToTransfert)
     let levelProm ="";
     if(req.DataToTransfert.prom == 1 || req.DataToTransfert.prom == 2){
          levelProm = "elementaire";
         }
+    else if(req.DataToTransfert.prom == 3 || req.DataToTransfert.prom == 4){
+        levelProm = "intermediaure";
+    }
+    else if(req.DataToTransfert.prom == 5 || req.DataToTransfert.prom == 6){
+        levelProm = "terminal";
+    };
         
     modelOfCours.find({level:levelProm})
     .then(Courses =>{
@@ -89,7 +94,18 @@ exports.getCoursesOfClass = (req, res)=>{
 exports.StudentSearchCourses =(req, res)=>{
     levelProm= "elementaire";
     let PonderationTot = 0;
+    const DatasOfStudent = req.Autorization;
     
+    if(DatasOfStudent.promoUser == 1 || DatasOfStudent.promoUser == 2){
+         levelProm = "elementaire";
+        }
+    else if(DatasOfStudent.promoUser == 3 || DatasOfStudent.promoUser == 4){
+        levelProm = "intermediaure";
+    }
+    else if(DatasOfStudent.promoUser == 5 || DatasOfStudent.promoUser == 6){
+        levelProm = "terminal";
+    };
+        
     modelOfCours.find({level:levelProm})
     .then(Courses =>{
         Courses.map((value)=>{
@@ -161,7 +177,7 @@ exports.getCotesOfStudent = (req, res)=>{
             place:0
         }      
     };
-
+    console.log(req.Autorization)
     modelCotesStudents.find({idStudent: req.Autorization.userId})
     .then(datas =>{
         console.log("Donnees trouvées");

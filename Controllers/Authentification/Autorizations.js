@@ -32,10 +32,32 @@ exports.CheckAutorizationUser =(req, res, next)=>{
         // search user in dataBase
         modelUser.findOne({_id:DataOfToken.idUser})
         .then(userFund =>{
-            req.Autorization ={
-                userId : userFund._id,
-                typeAccount:DataOfToken.modelUser
-            };
+            //console.log(userFund)
+            if(modelUser == modelOfStudents){
+                req.Autorization ={
+                    userId : userFund._id,
+                    ClassUser:userFund.registerDatas.CLASS,
+                    promoUser:userFund.registerDatas.PROMOTION,
+                    typeAccount:DataOfToken.modelUser
+                }
+            }
+            else if(modelUser == modelTeachers){
+                req.Autorization ={
+                    userId : userFund._id,
+                    ClassUser:userFund.CLASS,
+                    promoUser:userFund.PROMOTION,
+                    typeAccount:DataOfToken.modelUser
+                }
+            }
+
+            else if(modelUser == modelDirectors){
+                req.Autorization ={
+                    userId : userFund._id,
+                    ClassUser:"all",
+                    promoUser:0,
+                    typeAccount:DataOfToken.modelUser
+                }
+            }
             next();
         })
         .catch(error =>{
