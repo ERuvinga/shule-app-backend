@@ -107,14 +107,59 @@ exports.getCotesOfStudent = (req, res)=>{
     let Results={ // Resultat of Users
         period_1:{
             max:0,
+            place:0
         },
 
         period_2:{
             max:0,
+            place:0
         },    
         examen_1:{
-            max:0
-        }   
+            max:0,
+            place:0
+        },   
+        period_3:{
+            max:0,
+            place:0
+        },
+
+        period_4:{
+            max:0,
+            place:0
+        },    
+        examen_2:{
+            max:0,
+            place:0
+        },
+        period_5:{
+            max:0,
+            place:0
+        },
+
+        period_6:{
+            max:0,
+            place:0
+        },    
+        examen_3:{
+            max:0,
+            place:0
+        },
+        Trim1:{
+            max:0,
+            place:0,
+        },
+        Trim2:{
+            max:0,
+            place:0
+        },
+        Trim3:{
+            max:0,
+            place:0,
+        },
+        TotGen:{
+            max:0,
+            place:0
+        }      
     };
 
     modelCotesStudents.find({idStudent: req.Autorization.userId})
@@ -126,6 +171,7 @@ exports.getCotesOfStudent = (req, res)=>{
                     Results={
                         ...Results,
                         period_1:{
+                            ...Results.period_1,
                             max:Results.period_1.max + parseInt(value.cote),
                         }
                 };
@@ -135,6 +181,7 @@ exports.getCotesOfStudent = (req, res)=>{
                     Results={
                         ...Results,
                         period_2:{
+                            ...Results.period_2,
                             max:Results.period_2.max + parseInt(value.cote),
                         }
                 };
@@ -144,13 +191,90 @@ exports.getCotesOfStudent = (req, res)=>{
                     Results={
                         ...Results,
                         examen_1:{
+                            ...Results.examen_1,
                             max:Results.examen_1.max + parseInt(value.cote),
+                        }
+                };
+                break;
+                case '3P':
+                    Results={
+                        ...Results,
+                        period_3:{
+                            ...Results.period_3,
+                            max:Results.period_3.max + parseInt(value.cote),
+                        }
+                };
+                break;
+
+                case '4P':
+                    Results={
+                        ...Results,
+                        period_4:{
+                            ...Results.period_4,
+                            max:Results.period_4.max + parseInt(value.cote),
+                        }
+                };
+                break;
+
+                case 'Examen2':
+                    Results={
+                        ...Results,
+                        examen_2:{
+                            ...Results.examen_2,
+                            max:Results.examen_2.max + parseInt(value.cote),
+                        }
+                };
+                break;
+                case '5P':
+                    Results={
+                        ...Results,
+                        period_5:{
+                            ...Results.period_5,
+                            max:Results.period_5.max + parseInt(value.cote),
+                        }
+                };
+                break;
+
+                case '6P':
+                    Results={
+                        ...Results,
+                        period_6:{
+                            ...Results.period_6,
+                            max:Results.period_6.max + parseInt(value.cote),
+                        }
+                };
+                break;
+
+                case 'Examen3':
+                    Results={
+                        ...Results,
+                        examen_3:{
+                            ...Results.examen_3,
+                            max:Results.examen_3.max + parseInt(value.cote),
                         }
                 };
                 break;
             }
         });
-        console.log(Results);
+        Results = {
+            ...Results,
+            Trim1: {
+                ...Results.Trim1,
+                max:Results.period_1.max + Results.period_2.max + Results.examen_1.max
+            },
+            Trim2: {
+                ...Results.Trim2,
+                max:Results.period_3.max + Results.period_4.max + Results.examen_2.max
+            },
+            Trim3: {
+                ...Results.Trim3,
+                max:Results.period_5.max + Results.period_6.max + Results.examen_3.max
+            },
+            TotGen: {
+                ...Results.TotGen,
+                max:Results.period_1.max + Results.period_2.max + Results.examen_1.max + Results.period_3.max + Results.period_4.max + Results.examen_2.max + Results.period_5.max + Results.period_6.max + Results.examen_3.max
+            },
+        }
         res.status(200).json({Cotes:datas,Resultat:Results});
     })
     .catch(error =>{
