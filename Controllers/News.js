@@ -20,7 +20,6 @@ exports.NewsPub = (req, res)=>{
 exports.getAllPub = (re, res)=>{
     ModelNews.find()
     .then((allNews=>{
-        console.log(allNews)
         res.status(200).json({News:allNews});
     }))
     .catch(error=>{
