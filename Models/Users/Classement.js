@@ -1,4 +1,4 @@
-// Directors model datas
+// Classement model datas
 
 const mongoose = require('mongoose');
 const ClassmentShema = mongoose.Schema({

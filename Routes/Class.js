@@ -7,5 +7,6 @@ router.get("/", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.getU
 router.get("/Cotes", CtrlrCheckAutorizationUser.CheckAutorizationUser,CtrlClass.getCotesOfStudent);
 router.post("/newsCotes", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.SavingCote);
 router.get("/Student", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.StudentSearchCourses);
+router.post("/FicheStudent", CtrlrCheckAutorizationUser.CheckAutorizationUser, CtrlClass.getFicheStudent);
 
 module.exports = router;
