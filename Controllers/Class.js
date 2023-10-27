@@ -4,6 +4,7 @@ const modelOfSTeacher = require("../Models/Users/Teachers"); // import model of 
 const modelOfCours = require("../Models/Courses"); // import model of students user
 const modelCotesStudents = require("../Models/CotesStudents");
 const modelClassMent = require("../Models/Users/Classement"); //import Model of ClassementStudents
+const modelDatesProclam = require("../Models/Proclammations");
 
 exports.getUserOfClass = (req, res, next)=>{
 
@@ -92,7 +93,7 @@ exports.getCoursesOfClass = (req, res)=>{
 
 
 exports.StudentSearchCourses =(req, res)=>{
-    levelProm= "elementaire";
+    let levelProm= "";
     let PonderationTot = 0;
     const DatasOfStudent = req.Autorization;
     
@@ -177,7 +178,7 @@ exports.getCotesOfStudent = (req, res)=>{
             place:0
         }      
     };
-    console.log(req.Autorization)
+    
     modelCotesStudents.find({idStudent: req.Autorization.userId})
     .then(datas =>{
         console.log("Donnees trouvées");
@@ -291,11 +292,33 @@ exports.getCotesOfStudent = (req, res)=>{
                 max:Results.period_1.max + Results.period_2.max + Results.examen_1.max + Results.period_3.max + Results.period_4.max + Results.examen_2.max + Results.period_5.max + Results.period_6.max + Results.examen_3.max
             },
         }
-        res.status(200).json({Cotes:datas,Resultat:Results});
+        modelDatesProclam.find()
+        .then(datesProclam =>{
+            console.log(datesProclam);          
+            res.status(200).json({Cotes:datas, Resultat:Results, datesProclam });  
+        })
+        .catch(error =>{
+            console.log(error);
+            res.status(500).json({msg:"error server"});       
+        })
     })
     .catch(error =>{
         console.log(error);
         res.status(500).json({msg:"error server"});
     })
+}
 
+exports.getFicheStudent = (req, res)=>{
+    const DatasOfStudent = req.body;
+    
+    modelCotesStudents.find({idStudent: DatasOfStudent.idStudent})
+    .then(datas =>{
+        console.log("Donnees trouvées");
+        res.status(200).json({Cotes:datas});
+    })
+
+    .catch(error =>{
+        console.log(error);
+        res.status(500).json({msg:"error server"});
+    })
 }
